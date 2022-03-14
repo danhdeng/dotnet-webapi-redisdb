@@ -5,8 +5,8 @@ namespace RedisAPI.Models;
 public class Platform{
 
     [Required]
-    public string id { get; set; }=$"Platform:{Guid.NewGuid().ToString()}";
+    public string Id { get; set; }=$"platform:{Guid.NewGuid().ToString()}";
     
     [Required]
-    public string Name { get; set; }=string.Empty;
+    public string Name { get; set; }=String.Empty;
 }
