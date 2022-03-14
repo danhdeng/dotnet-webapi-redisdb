@@ -21,18 +21,28 @@ public class RedisPlatformRepo : IPlatformRepo
 
         var seerializedPlatform=JsonSerializer.Serialize(platform);
 
-        db.StringSet(platform.Id, seerializedPlatform);
-        db.SetAdd("platformset", seerializedPlatform);
+        // db.StringSet(platform.Id, seerializedPlatform);
+        // db.SetAdd("platformset", seerializedPlatform);
+
+        //use hashset to store the data
+
+        db.HashSet("platformHashset", new HashEntry[]{new HashEntry(platform.Id, seerializedPlatform)});
     }
 
     public IEnumerable<Platform?>? GetAllPlatforms()
     {
         var db=_redis.GetDatabase();
 
-        var completeSets=db.SetMembers("platformset");
+        // var completeSets=db.SetMembers("platformset");
         
-        if(completeSets != null){
-            var objects =Array.ConvertAll(completeSets, val=>JsonSerializer.Deserialize<Platform>(val));
+        // if(completeSets != null){
+        //     var objects =Array.ConvertAll(completeSets, val=>JsonSerializer.Deserialize<Platform>(val));
+        //     return objects;
+        // }
+         var completeHashSet=db.HashGetAll("platformHashset");
+        
+        if(completeHashSet != null){
+            var objects =Array.ConvertAll(completeHashSet, val=>JsonSerializer.Deserialize<Platform>(val.Value));
             return objects;
         }
         return null;
@@ -43,7 +53,11 @@ public class RedisPlatformRepo : IPlatformRepo
     {
        var db=_redis.GetDatabase();
 
-       var platform=db.StringGet(id);
+    //    var platform=db.StringGet(id);
+    //    if(!string.IsNullOrEmpty(platform)){
+    //        return JsonSerializer.Deserialize<Platform> (platform);
+    //    }
+     var platform=db.HashGet("platformHashset",id);
        if(!string.IsNullOrEmpty(platform)){
            return JsonSerializer.Deserialize<Platform> (platform);
        }

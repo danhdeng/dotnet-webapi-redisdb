@@ -18,7 +18,7 @@ public class PlatformsController : ControllerBase{
         return Ok(_repository.GetAllPlatforms());
     }
 
-    [HttpGet("{id}", Name = "GetAllPlatformById")]
+    [HttpGet("{id}", Name = "GetPlatformById")]
     public ActionResult<IEnumerable<Platform>> GetPlatformById(string id){
         var platform = _repository.GetPlatformById(id);
         if(platform != null){

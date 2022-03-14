@@ -16,13 +16,17 @@ docker compose stop
 
 docker exec -it {container_id} /bin/bash
 
-docker exec -it a73200b7643c /bin/bash
+docker exec -it 87675c89ba0a /bin/bash
 
 # REDIS-CLI
 
+# To start REDIS-CLI shell
+
+redis-cli
+
 # test REDIS server running properly with redis-cli
 
-ping
+redis-cli ping
 
 # set data in redis with redis-cli
 
